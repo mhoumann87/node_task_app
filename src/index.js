@@ -6,6 +6,7 @@ require('./db/mongoose');
 
 // Get access to our models
 const User = require('./models/user');
+const Task = require('./models/task');
 
 // setup express for the project
 const app = express();
@@ -24,14 +25,22 @@ app.use(express.json());
 
 // Post
 app.post('/users', (req, res) => {
-  console.log(req.body);
-
-  // Create a new User
+  // Create a new instance User
   const user = new User(req.body);
 
   user
     .save()
     .then(() => res.status(201).send(user))
+    .catch(err => res.status(400).send(err));
+});
+
+app.post('/tasks', (req, res) => {
+  // Create a new instance of Task
+  const task = new Task(req.body);
+
+  task
+    .save()
+    .then(() => res.status(201).send(task))
     .catch(err => res.status(400).send(err));
 });
 
