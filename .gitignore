@@ -119,3 +119,4 @@ dist
 
 # "testing" files
 mongoDB.js
+src/db/mongoose.js
