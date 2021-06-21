@@ -45,22 +45,27 @@ app.post('/users', async (req, res) => {
 // Read
 
 // Get all
-app.get('/users', (req, res) => {
-  User.find({})
-    .then(users => res.send(users))
-    .catch(err => res.status(500).send());
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (err) {
+    res.status(500).send();
+  }
 });
 
 // Get one
-app.get('/users/:id', (req, res) => {
-  User.findById(req.params.id)
-    .then(user => {
-      if (!user) {
-        return res.status(404).send();
-      }
-      res.send(user);
-    })
-    .catch(err => res.status(500).send(err));
+app.get('/users/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).send();
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(500).send();
+  }
 });
 
 //*********************************************
