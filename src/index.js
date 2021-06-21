@@ -7,6 +7,7 @@ require('./db/mongoose');
 // Get access to our models
 const User = require('./models/user');
 const Task = require('./models/task');
+const { ObjectID } = require('mongodb');
 
 // setup express for the project
 const app = express();
@@ -23,7 +24,12 @@ app.use(express.json());
 // Setting up the routes
 //====================================
 
-// Post
+//*********************************************
+//* Users
+//*********************************************
+
+// Create
+
 app.post('/users', (req, res) => {
   // Create a new instance User
   const user = new User(req.body);
@@ -33,6 +39,31 @@ app.post('/users', (req, res) => {
     .then(() => res.status(201).send(user))
     .catch(err => res.status(400).send(err));
 });
+
+// Read
+
+// Get all
+app.get('/users', (req, res) => {
+  User.find({})
+    .then(users => res.send(users))
+    .catch(err => res.status(500).send());
+});
+
+// Get one
+app.get('/users/:id', (req, res) => {
+  User.findById(new ObjectID(req.params.id))
+    .then(user => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send(user);
+    })
+    .catch(err => res.status(500).send(err));
+});
+
+//*********************************************
+//* Tasks
+//*********************************************
 
 app.post('/tasks', (req, res) => {
   // Create a new instance of Task
