@@ -51,7 +51,7 @@ app.get('/users', (req, res) => {
 
 // Get one
 app.get('/users/:id', (req, res) => {
-  User.findById(new ObjectID(req.params.id))
+  User.findById(req.params.id)
     .then(user => {
       if (!user) {
         return res.status(404).send();
@@ -65,6 +65,7 @@ app.get('/users/:id', (req, res) => {
 //* Tasks
 //*********************************************
 
+// Create
 app.post('/tasks', (req, res) => {
   // Create a new instance of Task
   const task = new Task(req.body);
@@ -75,4 +76,23 @@ app.post('/tasks', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+// Read
+app.get('/tasks', (req, res) => {
+  Task.find({})
+    .then(tasks => res.send(tasks))
+    .catch(err => res.status(500).send());
+});
+
+app.get('/tasks/:id', (req, res) => {
+  Task.findById(req.params.id)
+    .then(task => {
+      if (!task) {
+        return res.status(404).send();
+      }
+      res.send(task);
+    })
+    .catch(err => res.status(500).send());
+});
+
+// Start the server
 app.listen(port, () => console.log(`Server in running on port ${port}`));
