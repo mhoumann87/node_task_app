@@ -120,3 +120,4 @@ dist
 # "testing" files
 mongoDB.js
 
+/playground
