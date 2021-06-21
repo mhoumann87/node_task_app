@@ -191,5 +191,22 @@ app.patch('/tasks/:id', async (req, res) => {
   }
 });
 
+// Delete
+app.delete('/tasks/:id', async (req, res) => {
+  const _id = req.params.id;
+
+  try {
+    const task = await Task.findByIdAndDelete(_id);
+
+    if (!task) {
+      return res.status(404).send();
+    }
+
+    res.send(task);
+  } catch (err) {
+    res.status(500).send();
+  }
+});
+
 // Start the server
 app.listen(port, () => console.log(`Server in running on port ${port}`));
