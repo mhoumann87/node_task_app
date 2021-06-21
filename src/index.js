@@ -101,6 +101,22 @@ app.patch('/users/:id', async (req, res) => {
   }
 });
 
+// Delete
+app.delete('/users/:id', async (req, res) => {
+  const _id = req.params.id;
+
+  try {
+    const user = await User.findByIdAndDelete(_id);
+
+    if (!user) {
+      return res.status(404).send();
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(500).send();
+  }
+});
+
 //*********************************************
 //* Tasks
 //*********************************************
