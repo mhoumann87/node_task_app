@@ -30,14 +30,16 @@ app.use(express.json());
 
 // Create
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   // Create a new instance User
   const user = new User(req.body);
 
-  user
-    .save()
-    .then(() => res.status(201).send(user))
-    .catch(err => res.status(400).send(err));
+  try {
+    await user.save();
+    res.status(201).send(user);
+  } catch (err) {
+    res.status(400).send(err);
+  }
 });
 
 // Read
