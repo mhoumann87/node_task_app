@@ -73,32 +73,41 @@ app.get('/users/:id', async (req, res) => {
 //*********************************************
 
 // Create
-app.post('/tasks', (req, res) => {
+app.post('/tasks', async (req, res) => {
   // Create a new instance of Task
   const task = new Task(req.body);
 
-  task
-    .save()
-    .then(() => res.status(201).send(task))
-    .catch(err => res.status(400).send(err));
+  try {
+    await task.save();
+    res.status(201).send(task);
+  } catch (err) {
+    res.status(400).send(err);
+  }
 });
 
 // Read
-app.get('/tasks', (req, res) => {
-  Task.find({})
-    .then(tasks => res.send(tasks))
-    .catch(err => res.status(500).send());
+app.get('/tasks', async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    res.send(tasks);
+  } catch (err) {
+    res.status(500).send();
+  }
 });
 
-app.get('/tasks/:id', (req, res) => {
-  Task.findById(req.params.id)
-    .then(task => {
-      if (!task) {
-        return res.status(404).send();
-      }
-      res.send(task);
-    })
-    .catch(err => res.status(500).send());
+app.get('/tasks/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const task = await Task.findById(_id);
+
+    if (!task) {
+      return res.status(404).send();
+    }
+
+    res.send(task);
+  } catch (err) {
+    res.status(500).send();
+  }
 });
 
 // Start the server
