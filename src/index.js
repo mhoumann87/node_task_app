@@ -71,6 +71,18 @@ app.get('/users/:id', async (req, res) => {
 
 // Update
 app.patch('/users/:id', async (req, res) => {
+  // Check to see if updates are in our User object
+  const allowedUpdates = ['name', 'age', 'email', 'password'];
+  const updates = Object.keys(req.body);
+
+  const isValidOperation = updates.every(update =>
+    allowedUpdates.includes(update)
+  );
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: 'Invalid updates' });
+  }
+
   const _id = req.params.id;
 
   try {
