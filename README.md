@@ -8,3 +8,4 @@ Simple Task App with MongoDB and NodeJS
 - mongoose
 - validator
 - express
+- bcrypt
