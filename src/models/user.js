@@ -1,8 +1,13 @@
 // Import dependencies
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
-const User = mongoose.model('User', {
+// Cut out the model and put it in the Schema function, so we are able to
+// use middleware, in our case we want to hash the password before we are
+// saving it in the database
+
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -40,5 +45,19 @@ const User = mongoose.model('User', {
     },
   },
 });
+
+// Set up the middleware to run before we save the User
+
+userSchema.pre('save', async function (next) {
+  const user = this;
+
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  next();
+});
+
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

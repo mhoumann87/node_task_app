@@ -65,10 +65,22 @@ router.patch('/users/:id', async (req, res) => {
   const _id = req.params.id;
 
   try {
-    const user = await User.findByIdAndUpdate(_id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    //! This way make it possible to hash the password
+
+    // Find the user
+    const user = await User.findById(_id);
+
+    // iterate over all the updates
+    updates.forEach(update => (user[update] = req.body[update]));
+
+    // Save the user
+    await user.save();
+
+    //* This way to update the user skips middleware and out password hashing
+    // const user = await User.findByIdAndUpdate(_id, req.body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
 
     if (!user) {
       return res.status(404).send();
