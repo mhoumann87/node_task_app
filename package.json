@@ -6,6 +6,7 @@
   "author": "Michael Houmann <mhoumann87@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.14",
