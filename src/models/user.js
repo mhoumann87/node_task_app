@@ -92,7 +92,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 // Generate jwt token when user is created or logging in
 userSchema.methods.generateAuthToken = async function (_id) {
   const user = this;
-  const token = await jwt.sign({ _id: user._id.toString() }, jwtSecret.secret);
+  const token = await jwt.sign({ _id: user._id.toString() }, 'test');
 
   user.tokens = user.tokens.concat({ token });
   await user.save();
