@@ -49,6 +49,14 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 // Set up the middleware to run before we save the User
@@ -85,6 +93,10 @@ userSchema.statics.findByCredentials = async (email, password) => {
 userSchema.methods.generateAuthToken = async function (_id) {
   const user = this;
   const token = await jwt.sign({ _id: user._id.toString() }, jwtSecret.secret);
+
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+
   return token;
 };
 
