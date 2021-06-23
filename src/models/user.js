@@ -2,6 +2,10 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+// Get the secret for jwt
+const jwtSecret = require('../../jwtSecret');
 
 // Cut out the model and put it in the Schema function, so we are able to
 // use middleware, in our case we want to hash the password before we are
@@ -75,6 +79,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   }
 
   return user;
+};
+
+// Generate jwt token when user is created or logging in
+userSchema.methods.generateAuthToken = async function (_id) {
+  const user = this;
+  const token = await jwt.sign({ _id: user._id.toString() }, jwtSecret.secret);
+  return token;
 };
 
 const User = mongoose.model('User', userSchema);
