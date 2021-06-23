@@ -9,3 +9,4 @@ Simple Task App with MongoDB and NodeJS
 - validator
 - express
 - bcrypt
+- jsonwebtoken
